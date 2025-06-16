@@ -1,37 +1,31 @@
 #include <iostream>
-#include "driver.h"
+#include "driver/driver.h"
 
 int main()
 {
 	printf("[i] program started\n");
 
-	while (!globals::process_id) {
-		globals::process_id = driver::get_process_id("chrome.exe");
-		Sleep(1000);
+	// find process		
+	globals::process_id = driver::get_process_id("cs2.exe");
+	if (!globals::process_id) {
+		printf("[e] unable to find process 'cs2.exe'\n");
+		std::cin.get();
 	}
 	printf("[i] found process id: %p\n", globals::process_id);
 
-	while (!globals::module_base) {
-		globals::module_base = driver::get_module_base(globals::process_id, "chrome.exe");
-		Sleep(1000);
-	}
-	printf("[i] found module base: %p\n", (void*)globals::module_base);
-
-	while (!globals::peb_address) {
-		globals::peb_address = driver::get_peb_address(globals::process_id);
-		Sleep(1000);
-	}
-	printf("[i] found peb address: %p\n", (void*)globals::peb_address);
-
-	while (!globals::client) {
-		globals::client = driver::get_client(globals::process_id);
-		Sleep(1000);
+	// find client
+	globals::client = driver::get_client(globals::process_id);
+	if (!globals::client) {
+		printf("[e] unable to find client\n");
+		std::cin.get();
 	}
 	printf("[i] found client: %p\n", (void*)globals::client);
 
-	while (!globals::engine) {
-		globals::engine = driver::get_engine(globals::process_id);
-		Sleep(1000);
+	// find engine
+	globals::engine = driver::get_engine(globals::process_id);
+	if (!globals::engine) {
+		printf("[e] unable to find engine\n");
+		std::cin.get();
 	}
 	printf("[i] found engine: %p\n", (void*)globals::engine);
 

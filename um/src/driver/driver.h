@@ -6,7 +6,7 @@
 #include <TlHelp32.h>
 #include <mutex>
 #include <iostream>
-#include "globals.h"
+#include "../../globals.h"
 
 typedef struct _COPY_MEMORY {
 	void* buffer;

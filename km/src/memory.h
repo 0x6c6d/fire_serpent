@@ -37,10 +37,10 @@ namespace memory {
 		return (ULONG64)PsGetProcessSectionBaseAddress(proc);
 	}
 
-	ULONG64 get_module_info(PEPROCESS proc, UNICODE_STRING module_name, BOOL get_size) {
-		PCWSTR mod_name = module_name.Buffer;
-		UNICODE_STRING module_name;
-		RtlInitUnicodeString(&module_name, mod_name);
+	ULONG64 get_module_info(PEPROCESS proc, UNICODE_STRING mod_name, BOOL get_size) {
+		PCWSTR mod_name_wstr = mod_name.Buffer;
+		UNICODE_STRING module_name_uni;
+		RtlInitUnicodeString(&module_name_uni, mod_name_wstr);
 
 		PPEB peb = (PPEB)PsGetProcessPeb(proc);
 		if (!peb)
@@ -66,7 +66,7 @@ namespace memory {
 			list_entry = (PLIST_ENTRY)list_entry->Flink) {
 			PLDR_DATA_TABLE_ENTRY pEntry =
 				CONTAINING_RECORD(list_entry, LDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
-			if (RtlCompareUnicodeString(&pEntry->BaseDllName, &module_name, TRUE) ==
+			if (RtlCompareUnicodeString(&pEntry->BaseDllName, &module_name_uni, TRUE) ==
 				0) {
 				ULONG64 base_addr = (ULONG64)pEntry->DllBase;
 				ULONG64 size = (ULONG64)pEntry->SizeOfImage;

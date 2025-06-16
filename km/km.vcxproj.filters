@@ -19,18 +19,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\definitions.h">
+    <ClInclude Include="src\definitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\memory.h">
+    <ClInclude Include="src\memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\hook.h">
+    <ClInclude Include="src\hook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

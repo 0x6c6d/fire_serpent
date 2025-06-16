@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\globals.h">
+    <ClInclude Include="globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\driver.h">
+    <ClInclude Include="src\driver\driver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
