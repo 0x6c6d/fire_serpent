@@ -2,7 +2,8 @@
 #include <Windows.h>
 #include <cstdint>
 
-namespace globals {
+namespace globals 
+{
 	// gui
 	inline auto window_name = "FS Menu";
 	inline constexpr int window_w = 500;
@@ -17,4 +18,23 @@ namespace globals {
 	inline uintptr_t engine = NULL;
 	inline uintptr_t client_size = NULL;
 	inline uintptr_t engine_size = NULL;
+
+    // hacks
+    inline bool glow = false;
+	inline float glowColor[] = { 1.f, 0.f, 0.f, 1.f }; // equal to 255, 0, 0, 255
+
+	inline bool radar = false;
+}
+
+// https://github.com/frk1/hazedumper/blob/master/csgo.hpp
+namespace offsets
+{
+	constexpr ::std::ptrdiff_t dwLocalPlayer = 0xDEB99C;
+	constexpr ::std::ptrdiff_t dwGlowObjectManager = 0x535BAD0;
+	constexpr ::std::ptrdiff_t dwEntityList = 0x4E0102C;
+
+	constexpr ::std::ptrdiff_t m_iTeamNum = 0xF4;
+	constexpr ::std::ptrdiff_t m_lifeState = 0x25F;
+	constexpr ::std::ptrdiff_t m_iGlowIndex = 0x10488;
+	constexpr ::std::ptrdiff_t m_bSpotted = 0x93D;
 }

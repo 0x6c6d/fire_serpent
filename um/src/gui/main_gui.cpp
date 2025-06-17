@@ -9,11 +9,12 @@ int __stdcall wWinMain(
 	PWSTR arguments,
 	int commandShow)
 {
-	// create gui
+	// create gui context
 	gui::CreateHWindow(gui::WIN_NAME);
 	gui::CreateDevice();
 	gui::CreateImGui();
 
+	// render loop
 	while (gui::isRunning)
 	{
 		gui::BeginRender();

@@ -4,6 +4,13 @@
 #include "../../third_party/imgui/imgui_impl_dx9.h"
 #include "../../third_party/imgui/imgui_impl_win32.h"
 
+/*
+ * PROCESS FLOW
+ * 1. create Windows window
+ * 2. create directx device with that window
+ * 3. using those to draw an imgui menu on the window
+ */
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(
 	HWND window,
 	UINT message,
@@ -11,70 +18,77 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(
 	LPARAM long_param
 );
 
+// handles all the events of a windows window (e.g. klicking)
 LRESULT __stdcall WindowProcess(
 	HWND window,
 	UINT message,
 	WPARAM wide_param,
 	LPARAM long_param)
 {
+	// send window process msgs to imgui handler
 	if (ImGui_ImplWin32_WndProcHandler(window, message, wide_param, long_param))
 		return true;
 
 	switch (message)
 	{
-	case WM_SIZE: {
-		if (gui::device && wide_param != SIZE_MINIMIZED)
-		{
-			gui::presentParameters.BackBufferWidth = LOWORD(long_param);
-			gui::presentParameters.BackBufferHeight = HIWORD(long_param);
-			gui::ResetDevice();
-		}
-	}return 0;
+		// resizing
+		case WM_SIZE: {
+			if (gui::device && wide_param != SIZE_MINIMIZED)
+			{
+				gui::presentParameters.BackBufferWidth = LOWORD(long_param);
+				gui::presentParameters.BackBufferHeight = HIWORD(long_param);
+				gui::ResetDevice();
+			}
+		}return 0;
 
-	case WM_SYSCOMMAND: {
-		if ((wide_param & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-			return 0;
-	}break;
+		// disable ALT application menu
+		case WM_SYSCOMMAND: {
+			if ((wide_param & 0xfff0) == SC_KEYMENU) 
+				return 0;
+		}break;
 
-	case WM_DESTROY: {
-		PostQuitMessage(0);
-	}return 0;
+		// close window
+		case WM_DESTROY: {
+			PostQuitMessage(0);
+		}return 0;
 
-	case WM_LBUTTONDOWN: {
-		gui::position = MAKEPOINTS(long_param); // set click points
-	}return 0;
+		// set click points
+		case WM_LBUTTONDOWN: {
+			gui::position = MAKEPOINTS(long_param);
+		}return 0;
 
-	case WM_MOUSEMOVE: {
-		if (wide_param == MK_LBUTTON)
-		{
-			const auto points = MAKEPOINTS(long_param);
-			auto rect = ::RECT{ };
+		// move window
+		case WM_MOUSEMOVE: {
+			if (wide_param == MK_LBUTTON)
+			{
+				const auto points = MAKEPOINTS(long_param);
+				auto rect = ::RECT{ };
 
-			GetWindowRect(gui::window, &rect);
+				GetWindowRect(gui::window, &rect);
 
-			rect.left += points.x - gui::position.x;
-			rect.top += points.y - gui::position.y;
+				rect.left += points.x - gui::position.x;
+				rect.top += points.y - gui::position.y;
 
-			if (gui::position.x >= 0 &&
-				gui::position.x <= gui::WIDTH &&
-				gui::position.y >= 0 && gui::position.y <= 19)
-				SetWindowPos(
-					gui::window,
-					HWND_TOPMOST,
-					rect.left,
-					rect.top,
-					0, 0,
-					SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOZORDER
-				);
-		}
+				if (gui::position.x >= 0 &&
+					gui::position.x <= gui::WIDTH &&
+					gui::position.y >= 0 && gui::position.y <= 19)
+					SetWindowPos(
+						gui::window,
+						HWND_TOPMOST,
+						rect.left,
+						rect.top,
+						0, 0,
+						SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOZORDER
+					);
+			}
 
-	}return 0;
-
+		}return 0;
 	}
 
 	return DefWindowProc(window, message, wide_param, long_param);
 }
 
+// creates window
 void gui::CreateHWindow(const char* window_name) noexcept
 {
 	windowClass.cbSize = sizeof(WNDCLASSEX);
@@ -111,16 +125,17 @@ void gui::CreateHWindow(const char* window_name) noexcept
 	UpdateWindow(window);
 }
 
+// clean up window
 void gui::DestroyHWindow() noexcept
 {
 	DestroyWindow(window);
 	UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 }
 
+// create direct x9 device
 bool gui::CreateDevice() noexcept
 {
 	d3d = Direct3DCreate9(D3D_SDK_VERSION);
-
 	if (!d3d)
 		return false;
 
@@ -145,6 +160,7 @@ bool gui::CreateDevice() noexcept
 	return true;
 }
 
+// called whenever updating the window
 void gui::ResetDevice() noexcept
 {
 	ImGui_ImplDX9_InvalidateDeviceObjects();
@@ -157,6 +173,7 @@ void gui::ResetDevice() noexcept
 	ImGui_ImplDX9_CreateDeviceObjects();
 }
 
+// clean up the device
 void gui::DestroyDevice() noexcept
 {
 	if (device)
@@ -172,6 +189,7 @@ void gui::DestroyDevice() noexcept
 	}
 }
 
+// init imgui context
 void gui::CreateImGui() noexcept
 {
 	IMGUI_CHECKVERSION();
@@ -186,6 +204,7 @@ void gui::CreateImGui() noexcept
 	ImGui_ImplDX9_Init(device);
 }
 
+// clean up imgui context
 void gui::DestroyImGui() noexcept
 {
 	ImGui_ImplDX9_Shutdown();
@@ -193,6 +212,7 @@ void gui::DestroyImGui() noexcept
 	ImGui::DestroyContext();
 }
 
+// start rendering window
 void gui::BeginRender() noexcept
 {
 	MSG message;
@@ -208,12 +228,13 @@ void gui::BeginRender() noexcept
 		}
 	}
 
-	// Start the Dear ImGui frame
+	// start imgui frame
 	ImGui_ImplDX9_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 }
 
+// handle direct x stuff
 void gui::EndRender() noexcept
 {
 	ImGui::EndFrame();
@@ -233,11 +254,12 @@ void gui::EndRender() noexcept
 
 	const auto result = device->Present(0, 0, 0, 0);
 
-	// Handle loss of D3D9 device
+	// handle loss of D3D9 device
 	if (result == D3DERR_DEVICELOST && device->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
 		ResetDevice();
 }
 
+// stuff to render in the window
 void gui::Render() noexcept
 {
 	ImGui::SetNextWindowPos({ 0, 0 });
