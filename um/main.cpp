@@ -1,7 +1,7 @@
-#include "../globals.h"
-#include "gui/gui.h"
-#include "logs/logs.h"
-#include "utils/driver.h"
+#include "globals.h"
+#include "src/gui/gui.h"
+#include "src/logs/logs.h"
+#include "src/utils/driver.h"
 
 #include <thread>
 #include <iostream>
