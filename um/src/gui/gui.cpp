@@ -1,5 +1,4 @@
 #include "gui.h"
-#include "../../globals.h"
 #include "../logs/logs.h"
 
 #include "../../third_party/imgui/imgui.h"
@@ -225,7 +224,7 @@ void gui::BeginRender() noexcept
 
 		if (message.message == WM_QUIT)
 		{
-			isRunning = !isRunning;
+			is_runninig = !is_runninig;
 			return;
 		}
 	}
@@ -268,7 +267,7 @@ void gui::Render() noexcept
 	ImGui::SetNextWindowSize({ WIDTH, HEIGHT });
 	ImGui::Begin(
 		"subscribe to cazzy",
-		&isRunning,
+		&is_runninig,
 		ImGuiWindowFlags_NoResize |
 		ImGuiWindowFlags_NoSavedSettings |
 		ImGuiWindowFlags_NoCollapse |

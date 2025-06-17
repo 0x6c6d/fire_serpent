@@ -10,7 +10,7 @@ namespace gui
 	inline const char* WIN_NAME = globals::window_name;
 	
 	// when this changes, exit threads & close menu
-	inline bool isRunning = true;
+	inline bool is_runninig = true;
 
 	// winapi window vars
 	inline HWND window = nullptr;

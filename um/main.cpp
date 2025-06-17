@@ -1,8 +1,5 @@
-#include "globals.h"
 #include "src/gui/gui.h"
-#include "src/logs/logs.h"
-#include "src/utils/driver.h"
-
+#include "src/hacks/hacks.h"
 #include <thread>
 #include <iostream>
 
@@ -13,12 +10,14 @@ int __stdcall wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int)
     // run km driver check in seperate thread
     std::thread(km_check).detach();
 
+    std::thread(hacks::visuals_thread).detach();
+
     // start gui
     gui::CreateHWindow(gui::WIN_NAME);
     gui::CreateDevice();
     gui::CreateImGui();
 
-    while (gui::isRunning)
+    while (gui::is_runninig)
     {
         gui::BeginRender();
         gui::Render();
