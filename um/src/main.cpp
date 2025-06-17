@@ -1,34 +1,61 @@
-#include <iostream>
+#include "../globals.h"
+#include "gui/gui.h"
+#include "logs/logs.h"
 #include "utils/driver.h"
 
-int main()
+#include <thread>
+#include <iostream>
+
+void km_check();
+
+int __stdcall wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int)
 {
-	printf("[i] program started\n");
+    // run km driver check in seperate thread
+    std::thread(km_check).detach();
 
-	// find process		
-	globals::process_id = driver::get_process_id("cs2.exe");
-	if (!globals::process_id) {
-		printf("[e] unable to find process 'cs2.exe'\n");
-		std::cin.get();
-	}
-	printf("[i] found process id: %p\n", globals::process_id);
+    // start gui
+    gui::CreateHWindow(gui::WIN_NAME);
+    gui::CreateDevice();
+    gui::CreateImGui();
 
-	// find client
-	globals::client = driver::get_client(globals::process_id);
-	if (!globals::client) {
-		printf("[e] unable to find client\n");
-		std::cin.get();
-	}
-	printf("[i] found client: %p\n", (void*)globals::client);
+    while (gui::isRunning)
+    {
+        gui::BeginRender();
+        gui::Render();
+        gui::EndRender();
 
-	// find engine
-	globals::engine = driver::get_engine(globals::process_id);
-	if (!globals::engine) {
-		printf("[e] unable to find engine\n");
-		std::cin.get();
-	}
-	printf("[i] found engine: %p\n", (void*)globals::engine);
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
 
-	std::cin.get();
-	return 0;
+    gui::DestroyImGui();
+    gui::DestroyDevice();
+    gui::DestroyHWindow();
+
+    return EXIT_SUCCESS;
+}
+
+void km_check()
+{
+    logs::log(logs::Level::Info, "[i] program started\n");
+
+    globals::process_id = driver::get_process_id("cs2.exe");
+    if (!globals::process_id) {
+        logs::log(logs::Level::Error, "[e] unable to find process 'cs2.exe'\n");
+        return;
+    }
+    logs::log(logs::Level::Info, "[i] found process id: %p\n", globals::process_id);
+
+    globals::client = driver::get_client(globals::process_id);
+    if (!globals::client) {
+        logs::log(logs::Level::Error, "[e] unable to find client\n");
+        return;
+    }
+    logs::log(logs::Level::Info, "[i] found client: %p\n", (void*)globals::client);
+
+    globals::engine = driver::get_engine(globals::process_id);
+    if (!globals::engine) {
+        logs::log(logs::Level::Error, "[e] unable to find engine\n");
+        return;
+    }
+    logs::log(logs::Level::Info, "[i] found engine: %p\n", (void*)globals::engine);
 }

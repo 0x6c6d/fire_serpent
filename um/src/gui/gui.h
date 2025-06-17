@@ -1,6 +1,6 @@
 #pragma once
 #include <d3d9.h>
-#include "globals.h"
+#include "../../globals.h"
 
 namespace gui 
 {

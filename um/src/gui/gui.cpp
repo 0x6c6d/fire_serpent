@@ -1,4 +1,6 @@
 #include "gui.h"
+#include "../../globals.h"
+#include "../logs/logs.h"
 
 #include "../../third_party/imgui/imgui.h"
 #include "../../third_party/imgui/imgui_impl_dx9.h"
@@ -273,7 +275,47 @@ void gui::Render() noexcept
 		ImGuiWindowFlags_NoMove
 	);
 
-	ImGui::Button("subscribe");
+	// glow hack
+	ImGui::Checkbox("glow", &globals::glow);
+	ImGui::ColorEdit4("glow color", globals::glow_color);
+
+	// radar hack
+	ImGui::Checkbox("radar", &globals::radar);
+
+	// collapsable log msgs
+	if (ImGui::CollapsingHeader("Log"))
+	{
+		ImGui::BeginChild("LogChild", ImVec2(0, 150), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		const auto& logs = logs::get_logs();
+
+		for (const auto& entry : logs)
+		{
+			ImVec4 color;
+
+			switch (entry.level) {
+			case logs::Level::Info:
+				color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // white
+				break;
+			case logs::Level::Warning:
+				color = ImVec4(1.0f, 0.8f, 0.2f, 1.0f); // yellow
+				break;
+			case logs::Level::Error:
+				color = ImVec4(1.0f, 0.3f, 0.3f, 1.0f); // red
+				break;
+			default:
+				color = ImVec4(1, 1, 1, 1);
+				break;
+			}
+
+			ImGui::PushStyleColor(ImGuiCol_Text, color);
+			ImGui::TextUnformatted(entry.message.c_str());
+			ImGui::PopStyleColor();
+		}
+
+		ImGui::SetScrollHereY(1.0f); // auto-scroll
+		ImGui::EndChild();
+	}
+
 
 	ImGui::End();
 }

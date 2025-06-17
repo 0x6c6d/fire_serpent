@@ -1,4 +1,4 @@
-#include "hook.h"
+#include "src/hook.h"
 
 NTSTATUS hook_handler(PVOID called_param)
 {

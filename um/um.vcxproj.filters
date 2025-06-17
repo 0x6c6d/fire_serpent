@@ -48,6 +48,9 @@
     <ClInclude Include="src\gui\gui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\logs\logs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -74,10 +77,10 @@
     <ClCompile Include="third_party\imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gui\main_gui.cpp">
+    <ClCompile Include="src\gui\gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gui\gui.cpp">
+    <ClCompile Include="src\logs\logs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

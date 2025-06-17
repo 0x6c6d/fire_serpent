@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <cstdint>
+#include <cstddef>
 
 namespace globals 
 {
@@ -21,7 +22,7 @@ namespace globals
 
     // hacks
     inline bool glow = false;
-	inline float glowColor[] = { 1.f, 0.f, 0.f, 1.f }; // equal to 255, 0, 0, 255
+	inline float glow_color[] = { 1.f, 0.f, 0.f, 1.f }; // rgba: equal to 255, 0, 0, 255
 
 	inline bool radar = false;
 }
