@@ -51,6 +51,9 @@
     <ClInclude Include="src\logs\logs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\hacks\hacks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -81,6 +84,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\logs\logs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hacks\hacks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

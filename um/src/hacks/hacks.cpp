@@ -27,16 +27,34 @@ void hacks::visuals_thread() noexcept
 			if (!player)
 				continue;
 
-			const auto team = driver::rpm<std::uintptr_t>(player + offsets::m_iTeamNum);
+			const auto team = driver::rpm<std::int32_t>(player + offsets::m_iTeamNum);
 			if (team == local_team)
 				continue;
 
-			const auto life_state = driver::rpm<std::uintptr_t>(player + offsets::m_lifeState);
+			const auto life_state = driver::rpm<std::int32_t>(player + offsets::m_lifeState);
 			// life_state zero means that player is alive
 			if (life_state != 0)
 				continue;
 
+			// glow hack
+			if (globals::glow)
+			{
+				const auto glow_index = driver::rpm<std::int32_t>(player + offsets::m_iGlowIndex);
 
+				driver::wpm(glow_manager + (glow_index * 0x38) + 0x8, globals::glow_color[0]); // red
+				driver::wpm(glow_manager + (glow_index * 0x38) + 0xC, globals::glow_color[1]); // green
+				driver::wpm(glow_manager + (glow_index * 0x38) + 0x10, globals::glow_color[2]); // blue
+				driver::wpm(glow_manager + (glow_index * 0x38) + 0x14, globals::glow_color[3]); // alpha
+
+				driver::wpm(glow_manager + (glow_index * 0x38) + 0x28, true);
+				driver::wpm(glow_manager + (glow_index * 0x38) + 0x38, false);
+			}
+
+			// radars hack
+			if (globals::radar)
+			{
+				driver::wpm(player + offsets::m_bSpotted, true);
+			}
 		}
 	}
 }
