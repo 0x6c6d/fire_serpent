@@ -28,6 +28,7 @@ namespace globals
 }
 
 // https://github.com/frk1/hazedumper/blob/master/csgo.hpp
+// https://github.com/sezzyaep/CS2-OFFSETS/blob/5c13fa1dabf3218ad2b1f6fbdbeb5f934aba683f/offsets.py#L22
 namespace offsets
 {
 	constexpr ::std::ptrdiff_t dwLocalPlayer = 0xDEB99C;
