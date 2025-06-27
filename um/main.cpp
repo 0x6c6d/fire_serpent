@@ -9,12 +9,11 @@ void km_check();
 
 int __stdcall wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int)
 {
-    // run km driver check in seperate thread
-    std::thread(km_check).detach();
+    km_check();
 
     std::thread(hacks::visuals_thread).detach();
 
-    // start gui
+    // start guis
     gui::CreateHWindow(gui::WIN_NAME);
     gui::CreateDevice();
     gui::CreateImGui();

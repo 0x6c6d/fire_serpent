@@ -27,15 +27,19 @@ namespace globals
 	inline bool radar = false;
 }
 
-// https://github.com/sezzyaep/CS2-OFFSETS/
+// https://github.com/a2x/cs2-dumper?tab=readme-ov-file
 namespace offsets
 {
-	constexpr ::std::ptrdiff_t dwLocalPlayer = 0x1912578;
-	constexpr ::std::ptrdiff_t dwGlowObjectManager = 0x19200C0;
-	constexpr ::std::ptrdiff_t dwEntityList = 0x18C2D58;
+	constexpr ::std::ptrdiff_t dwLocalPlayerPawn = 0x18560D0;	// offsets.hpp > cs2_dumper > offsets > client_dll
+	constexpr ::std::ptrdiff_t dwEntityList = 0x1A020A8;		// offsets.hpp > cs2_dumper > offsets > client_dll
 
-	constexpr ::std::ptrdiff_t m_iTeamNum = 0x3CB;
-	constexpr ::std::ptrdiff_t m_lifeState = 0x338;
-	constexpr ::std::ptrdiff_t m_iGlowIndex = 0x10488;
-	constexpr ::std::ptrdiff_t m_bSpotted = 0x93D;
+	constexpr ::std::ptrdiff_t m_iTeamNum = 0x3E3;				// client_dll.hpp > cs2_dumper > schemas > client_dll > C_BaseEntity
+	constexpr ::std::ptrdiff_t m_lifeState = 0x348;				// client_dll.hpp > cs2_dumper > schemas > client_dll > C_BaseEntity
+	constexpr ::std::ptrdiff_t m_iHealth = 0x344;				// client_dll.hpp > cs2_dumper > schemas > client_dll > C_BaseEntity
+	constexpr ::std::ptrdiff_t m_hPlayerPawn = 0x824;			// client_dll.hpp > cs2_dumper > schemas > client_dll > CCSPlayerController
+	constexpr ::std::ptrdiff_t m_Glow = 0xC00;					// client_dll.hpp > cs2_dumper > schemas > client_dll > C_BaseModelEntity
+	constexpr ::std::ptrdiff_t m_glowColorOverride = 0x40;		// client_dll.hpp > cs2_dumper > schemas > client_dll > CGlowProperty
+	constexpr ::std::ptrdiff_t m_bGlowing = 0x51;				// client_dll.hpp > cs2_dumper > schemas > client_dll > CGlowProperty
+	constexpr ::std::ptrdiff_t m_bSpotted = 0x8;				// client_dll.hpp > cs2_dumper > schemas > client_dll > EntitySpottedState_t
+
 }
