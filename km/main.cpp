@@ -32,7 +32,7 @@ NTSTATUS hook_handler(PVOID called_param)
 		PEPROCESS process;
 		if (NT_SUCCESS(PsLookupProcessByProcessId(m->pid, &process))) {
 			UNICODE_STRING dll_name;
-			RtlInitUnicodeString(&dll_name, L"engine.dll");
+			RtlInitUnicodeString(&dll_name, L"engine2.dll");
 			ULONG64 base_addr = memory::get_module_info(process, dll_name, false);
 			m->buffer = (void*)base_addr;
 		}
@@ -41,7 +41,7 @@ NTSTATUS hook_handler(PVOID called_param)
 		PEPROCESS process;
 		if (NT_SUCCESS(PsLookupProcessByProcessId(m->pid, &process))) {
 			UNICODE_STRING dll_name;
-			RtlInitUnicodeString(&dll_name, L"engine.dll");
+			RtlInitUnicodeString(&dll_name, L"engine2.dll");
 			ULONG64 size = memory::get_module_info(process, dll_name, true);
 			m->size = size;
 		}

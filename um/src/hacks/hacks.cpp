@@ -3,20 +3,31 @@
 #include "../gui/gui.h"
 #include "../utils/driver.h"
 #include <thread>
+#include "../logs/logs.h"
 
 void hacks::visuals_thread() noexcept
 {
+	static bool has_logged = false;
+	
 	while (gui::is_runninig) 
 	{
 		std::this_thread::sleep_for(std::chrono::microseconds(1));
 
 		const auto local_player = driver::rpm<std::uintptr_t>(globals::client + offsets::dwLocalPlayer);
 		if (!local_player)
+		{
+			if(!has_logged)
+				logs::log(logs::Level::Error, "[e] can't find local_player at: %p\n", local_player);
 			continue;
+		}
 
 		const auto glow_manager = driver::rpm<std::uintptr_t>(globals::client + offsets::dwGlowObjectManager);
 		if (!glow_manager)
+		{
+			if (!has_logged)
+				logs::log(logs::Level::Error, "[e] can't find glow_manager at: %p\n", glow_manager);
 			continue;
+		}
 
 		const auto local_team = driver::rpm<std::uintptr_t>(local_player + offsets::m_iTeamNum);
 
@@ -25,7 +36,11 @@ void hacks::visuals_thread() noexcept
 			// player addr = offset + (index * size of player)
 			const auto player = driver::rpm<std::uintptr_t>(globals::client + offsets::dwEntityList + i * 0x10);
 			if (!player)
+			{
+				if (!has_logged)
+					logs::log(logs::Level::Error, "[e] can't find player nr. %d at: %p\n", i, player);
 				continue;
+			}
 
 			const auto team = driver::rpm<std::int32_t>(player + offsets::m_iTeamNum);
 			if (team == local_team)
@@ -56,5 +71,7 @@ void hacks::visuals_thread() noexcept
 				driver::wpm(player + offsets::m_bSpotted, true);
 			}
 		}
+
+		has_logged = true;
 	}
 }

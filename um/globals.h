@@ -27,16 +27,15 @@ namespace globals
 	inline bool radar = false;
 }
 
-// https://github.com/frk1/hazedumper/blob/master/csgo.hpp
-// https://github.com/sezzyaep/CS2-OFFSETS/blob/5c13fa1dabf3218ad2b1f6fbdbeb5f934aba683f/offsets.py#L22
+// https://github.com/sezzyaep/CS2-OFFSETS/
 namespace offsets
 {
-	constexpr ::std::ptrdiff_t dwLocalPlayer = 0xDEB99C;
-	constexpr ::std::ptrdiff_t dwGlowObjectManager = 0x535BAD0;
-	constexpr ::std::ptrdiff_t dwEntityList = 0x4E0102C;
+	constexpr ::std::ptrdiff_t dwLocalPlayer = 0x1912578;
+	constexpr ::std::ptrdiff_t dwGlowObjectManager = 0x19200C0;
+	constexpr ::std::ptrdiff_t dwEntityList = 0x18C2D58;
 
-	constexpr ::std::ptrdiff_t m_iTeamNum = 0xF4;
-	constexpr ::std::ptrdiff_t m_lifeState = 0x25F;
+	constexpr ::std::ptrdiff_t m_iTeamNum = 0x3CB;
+	constexpr ::std::ptrdiff_t m_lifeState = 0x338;
 	constexpr ::std::ptrdiff_t m_iGlowIndex = 0x10488;
 	constexpr ::std::ptrdiff_t m_bSpotted = 0x93D;
 }
