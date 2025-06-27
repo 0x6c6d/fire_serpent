@@ -32,13 +32,13 @@ void hacks::visuals_thread() noexcept
 			continue;
 		}
 
-		for(int i = 1; i < 32; i++)
+		for(int i = 0; i < 32; i++)
 		{
-			uintptr_t list_entry1 = driver::rpm<std::uintptr_t>(entity_list + (8 * ((i & 0x7FFF) >> 9)) + 0x10);
+			uintptr_t list_entry1 = driver::rpm<std::uintptr_t>(entity_list + (8 * ((i & 0x7FFF) >> 9)) + 16);
 			if (!list_entry1)
 			{
 				if (log_msg)
-					logs::log(logs::Level::Warning, "[w] unable to find list_entry1 for player %d: %p\n", i, entity_list + (8 * ((i & 0x7FFF) >> 9)) + 0x10);
+					logs::log(logs::Level::Warning, "[w] unable to find list_entry1 for player %d: %p\n", i, entity_list + (8 * ((i & 0x7FFF) >> 9)) + 16);
 				continue;
 			}
 
@@ -72,7 +72,7 @@ void hacks::visuals_thread() noexcept
 				if (log_msg)
 					logs::log(logs::Level::Warning, "[w] unable to find p_cs_player_pawn_ptr for player %d: %p\n", i, list_entry2 + 120 * (player_pawn & 0x1FF));
 				continue;
-			}
+			}			
 
 			int team = driver::rpm<std::int32_t>(p_cs_player_pawn_ptr + offsets::m_iTeamNum);
 			if (team == local_team)
@@ -93,14 +93,28 @@ void hacks::visuals_thread() noexcept
 					logs::log(logs::Level::Info, "[i] glow hack active");
 					log_glow = false;
 				}
-					
-				DWORD colorArgb = ((DWORD)(globals::glow_color[3]) << 24) |
-					((DWORD)(globals::glow_color[0]) << 16) |
-					((DWORD)(globals::glow_color[1]) << 8) |
-					((DWORD)(globals::glow_color[2]));
 
-				//driver::wpm((p_cs_player_pawn_ptr + offsets::m_Glow + offsets::m_glowColorOverride), colorArgb);
-				//driver::wpm((p_cs_player_pawn_ptr + offsets::m_Glow + offsets::m_bGlowing), 1);
+				uint8_t r_t = static_cast<uint8_t>(globals::glow_color_t[0] * 255.0f);
+				uint8_t g_t = static_cast<uint8_t>(globals::glow_color_t[1] * 255.0f);
+				uint8_t b_t = static_cast<uint8_t>(globals::glow_color_t[2] * 255.0f);
+				uint8_t a_t = static_cast<uint8_t>(globals::glow_color_t[3] * 255.0f);
+				uint8_t r_ct = static_cast<uint8_t>(globals::glow_color_ct[0] * 255.0f);
+				uint8_t g_ct = static_cast<uint8_t>(globals::glow_color_ct[1] * 255.0f);
+				uint8_t b_ct = static_cast<uint8_t>(globals::glow_color_ct[2] * 255.0f);
+				uint8_t a_ct = static_cast<uint8_t>(globals::glow_color_ct[3] * 255.0f);
+				uintptr_t glow_color = ((uintptr_t)(0) << 24) | ((uintptr_t)(0) << 16) | ((uintptr_t)(0) << 8) | ((uintptr_t)(0));
+				uint32_t glow_type = 1;
+				uint32_t glow_enabled = 1;
+
+				// t
+				if (team == 2) { glow_color = ((uintptr_t)a_t << 24) | ((uintptr_t)b_t << 16) | ((uintptr_t)g_t << 8) | ((uintptr_t)r_t); }
+
+				// ct
+				if (team == 3) { glow_color = ((uintptr_t)a_ct << 24) | ((uintptr_t)b_ct << 16) | ((uintptr_t)g_ct << 8) | ((uintptr_t)r_ct); }
+
+				driver::wpm(p_cs_player_pawn_ptr + offsets::m_Glow + offsets::m_iGlowType, glow_type);
+				driver::wpm(p_cs_player_pawn_ptr + offsets::m_Glow + offsets::m_glowColorOverride, glow_color);
+				driver::wpm(p_cs_player_pawn_ptr + offsets::m_Glow + offsets::m_bGlowing, glow_enabled);
 			}
 			else
 			{
@@ -109,7 +123,7 @@ void hacks::visuals_thread() noexcept
 				log_glow = true;
 			}
 
-			// radars hack
+			// radars hack (doesn't work)
 			if (globals::radar)
 			{
 				if (log_radar)
@@ -117,7 +131,8 @@ void hacks::visuals_thread() noexcept
 					logs::log(logs::Level::Info, "[i] radar hack active");
 					log_radar = false;
 				}
-				//driver::wpm(player_pawn + offsets::m_bSpotted, true);
+
+				driver::wpm(player_pawn + offsets::m_bSpotted, 1);
 			}
 			else
 			{

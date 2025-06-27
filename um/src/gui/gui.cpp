@@ -276,7 +276,8 @@ void gui::Render() noexcept
 
 	// glow hack
 	ImGui::Checkbox("glow", &globals::glow);
-	ImGui::ColorEdit4("glow color", globals::glow_color);
+	ImGui::ColorEdit4("glow color t", globals::glow_color_t);
+	ImGui::ColorEdit4("glow color ct", globals::glow_color_ct);
 
 	// radar hack
 	ImGui::Checkbox("radar", &globals::radar);

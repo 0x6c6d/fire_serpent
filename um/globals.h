@@ -22,7 +22,8 @@ namespace globals
 
     // hacks
     inline bool glow = false;
-	inline float glow_color[] = { 1.f, 0.f, 0.f, 1.f }; // rgba: equal to 255, 0, 0, 255
+	inline float glow_color_t[] = { 1.f, 0.f, 0.f, 1.f }; // rgba: equal to 255, 0, 0, 255
+	inline float glow_color_ct[] = { 0.f, 0.f, 1.f, 1.f }; // rgba: equal to 255, 0, 0, 255
 
 	inline bool radar = false;
 }
@@ -38,6 +39,7 @@ namespace offsets
 	constexpr ::std::ptrdiff_t m_iHealth = 0x344;				// client_dll.hpp > cs2_dumper > schemas > client_dll > C_BaseEntity
 	constexpr ::std::ptrdiff_t m_hPlayerPawn = 0x824;			// client_dll.hpp > cs2_dumper > schemas > client_dll > CCSPlayerController
 	constexpr ::std::ptrdiff_t m_Glow = 0xC00;					// client_dll.hpp > cs2_dumper > schemas > client_dll > C_BaseModelEntity
+	constexpr ::std::ptrdiff_t m_iGlowType = 0x30;				// client_dll.hpp > cs2_dumper > schemas > client_dll > CGlowProperty
 	constexpr ::std::ptrdiff_t m_glowColorOverride = 0x40;		// client_dll.hpp > cs2_dumper > schemas > client_dll > CGlowProperty
 	constexpr ::std::ptrdiff_t m_bGlowing = 0x51;				// client_dll.hpp > cs2_dumper > schemas > client_dll > CGlowProperty
 	constexpr ::std::ptrdiff_t m_bSpotted = 0x8;				// client_dll.hpp > cs2_dumper > schemas > client_dll > EntitySpottedState_t
