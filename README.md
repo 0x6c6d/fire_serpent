@@ -22,3 +22,16 @@ fffff805`715b808f 4156               push    r14
 fffff800`54fc8080 48b800c1aefc8c93ffff mov     rax, 0FFFF938CFCAEC100h
 fffff800`54fc808a ffe0                 jmp     rax
 ```
+
+## requirements
+
+- windows driver kit
+	- https://learn.microsoft.com/en-us/windows-hardware/drivers/download-the-wdk
+- kdmapper
+	- https://github.com/TheCruZ/kdmapper
+- cs2
+
+## start project
+
+- map km.sys with kdmapper
+- start um.exe ingame
